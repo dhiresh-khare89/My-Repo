@@ -1,0 +1,67 @@
+<template>
+    <lightning-card>
+        <template if:true={surveyList}>
+            <div class="slds-m-around_medium">
+                <lightning-combobox
+                    label="Select a Survey"
+                    placeholder="Select a survey"
+                    options={surveyList}
+                    onchange={handleSurveyChange}>
+                </lightning-combobox>
+            </div>
+        </template>
+        <template if:true={templateList}>
+            <div class="slds-m-around_medium">
+                <lightning-combobox
+                    label="Select a Template"
+                    placeholder="Select a template"
+                    options={templateList}
+                    onchange={handleTemplateChange}>
+                </lightning-combobox>
+            </div>
+        </template>
+        <template if:true={questionList}>
+            <div class="slds-m-around_medium">
+                <template for:each={questionList} for:item="question">
+                    <div key={question.Id} class="slds-m-around_medium">
+                        <p>{question.Question__c}</p>
+                        <template if:true={showRadioOptions}>
+                            <template for:each={question.options} for:item="option">
+                                <lightning-radio-group
+                                    key={option.value}
+                                    label={option.label}
+                                    options={option}
+                                    value={question.answer}
+                                    onchange={handleAnswerChange}
+                                    data-question-id={question.Id}
+                                ></lightning-radio-group>
+                            </template>
+                        </template>
+                        <template if:true={showTextOptions}>
+                            <lightning-input
+                                type="text"
+                                label="Enter your answer"
+                                value={question.answer}
+                                onchange={handleAnswerChange}
+                                data-question-id={question.Id}
+                            ></lightning-input>
+                        </template>
+                    </div>
+                </template>
+                <div class="slds-m-around_medium">
+                    <lightning-button label="Submit" onclick={handleSubmit}></lightning-button>
+                </div>
+            </div>
+        </template>
+    </lightning-card>
+    <template if:true={showToast}>
+        <div class="slds-m-around_medium">
+            <lightning-toast
+                title={toastTitle}
+                message={toastMessage}
+                variant={toastVariant}
+                onclose={handleToastClose}>
+            </lightning-toast>
+        </div>
+    </template>
+</template>
